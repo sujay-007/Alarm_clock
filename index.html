@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Alarm Clock</title>
+<link rel = "stylesheet" href = "style.css">
+</head>
+
+<body>
+    <video id="background-video" autoplay loop muted poster="">
+        <source src="./media/samay.mp4" type="video/mp4">
+      </video>
+ <main>
+    <h1>Alarm Clock</h1>
+    <p id="timer"></p>
+
+    <form action="">
+        <div class = "input-box">
+            <div class ="input-field-date">
+                <label for="date">Select date</label>
+                <input type="date" id="date">
+            </div>
+            <div class="input-field-time">
+                <label for="hour">hr</label>
+                <input type="number" id="hour" max="23" min="0" value="00">
+                <label for="minutes">min</label>
+                <input type="number" id="minutes" max="59" min="0" value="00">
+                <label for="seconds">sec</label>
+                <input type="number" id="seconds" max="59" min="0" value="00">
+                <select id="appt" name="timezone">
+                    <option value="none" selected></option>
+                    <option value="am">am</option>
+                    <option value="pm">pm</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="buttons-container">
+            <button type="submit" id="set-alarm">Set Alarm</button>
+            <button type="submit" id="stop-alarm">Stop Alarm</button>
+    
+        </div>
+    </form>
+
+    <h1>Alarms</h1>
+    <div class="Alarms-container"></div>
+    <audio id="alarm-sound" src="./media/alarm.mp3"></audio>
+ </main>
+
+ <Script src="script.js"></Script>
+ 
+</body>
+
+</html>
