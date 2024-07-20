@@ -8,6 +8,7 @@ const secondsInput = document.getElementById('seconds');
 const alarmSound = document.getElementById('alarm-sound');
 
 let alarms = [];
+let currentAlarmIndex = null;
 
 function updateTime() {
     const now = new Date();
@@ -35,6 +36,11 @@ function createAlarmElement(alarm, index) {
     deleteButton.textContent = 'Delete';
     deleteButton.addEventListener('click', () => {
         clearTimeout(alarm.timeoutId);
+        if (currentAlarmIndex === index) {
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+            currentAlarmIndex = null;
+        }
         alarms.splice(index, 1);
         updateAlarmsContainer();
     });
@@ -58,6 +64,18 @@ function setAlarm(e) {
     const minutes = parseInt(minutesInput.value);
     const seconds = parseInt(secondsInput.value);
 
+    if (hours > 23 || minutes > 59 || seconds > 59) {
+        alert('Invalid time! Please enter a valid time (HH: 0-23, MM: 0-59, SS: 0-59).');
+        return;
+    }
+
+    // Check if the alarm already exists
+    const alarmExists = alarms.some(alarm => alarm.hours === hours && alarm.minutes === minutes && alarm.seconds === seconds);
+    if (alarmExists) {
+        alert('An alarm for this time already exists!');
+        return;
+    }
+
     let alarmTime = new Date();
     alarmTime.setHours(hours);
     alarmTime.setMinutes(minutes);
@@ -74,6 +92,7 @@ function setAlarm(e) {
 
     const timeoutId = setTimeout(() => {
         alarmSound.play();
+        currentAlarmIndex = alarms.findIndex(alarm => alarm.timeoutId === timeoutId);
     }, timeToAlarm);
 
     const alarm = { hours, minutes, seconds, timeoutId };
@@ -83,12 +102,17 @@ function setAlarm(e) {
 
 function stopAlarm(e) {
     e.preventDefault();
-    alarms.forEach(alarm => clearTimeout(alarm.timeoutId));
-    alarms = [];
-    updateAlarmsContainer();
-    alarmSound.pause();
-    alarmSound.currentTime = 0;
-    alert('All alarms stopped!');
+    if (currentAlarmIndex !== null) {
+        clearTimeout(alarms[currentAlarmIndex].timeoutId);
+        alarms.splice(currentAlarmIndex, 1);
+        updateAlarmsContainer();
+        alarmSound.pause();
+        alarmSound.currentTime = 0;
+        alert('Current alarm stopped!');
+        currentAlarmIndex = null;
+    } else {
+        alert('No alarm is currently ringing!');
+    }
 }
 
 setAlarmButton.addEventListener('click', setAlarm);

@@ -60,14 +60,6 @@ select {
     text-align: center;
     width: 100px;
 }
-
-select#appt {
-    width: 120px;
-}
-
-
-
-
 .buttons-container{
     display:flex;
     justify-content: center;
